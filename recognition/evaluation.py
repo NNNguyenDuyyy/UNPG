@@ -57,8 +57,9 @@ def inference(opt, device):
     if cuda and opt.global_rank == -1 and torch.cuda.device_count() > 1:
         model = torch.nn.DataParallel(model)
     
-    datasets = build_datasets(data_cfg, opt.batch_size, cuda, opt.workers, mode='test')
-    evals(data_cfg, save_dir, model, datasets, device, opt.wname, train=False)
+    #datasets = build_datasets(data_cfg, opt.batch_size, cuda, opt.workers, mode='test')
+    #evals(data_cfg, save_dir, model, datasets, device, opt.wname, train=False)
+    return model
     
 def parser():    
     parser = argparse.ArgumentParser(description='Face Test')
