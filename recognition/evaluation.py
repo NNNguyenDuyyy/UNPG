@@ -6,8 +6,8 @@ import sys
 import argparse
 import torch
 
-from PIL import Image
-from torchvision import transforms
+# from PIL import Image
+# from torchvision import transforms
 
 from datasets.build import build_datasets
 from utils.general import select_device, Logger
@@ -44,22 +44,22 @@ from tests.testkits import kface1v1verification, face1v1verification, ijb1v1veri
     
 #     return acc
 
-def read(image_path):
-    img = Image.open(image_path)
-    preprocess = transforms.Compose([
-        transforms.Resize((256, 512)),
-        transforms.ToTensor()
-    ])
-    img_tensor = preprocess(img).unsqueeze(0)  # Add batch dimension
-    return img_tensor
+# def read(image_path):
+#     img = Image.open(image_path)
+#     preprocess = transforms.Compose([
+#         transforms.Resize((256, 512)),
+#         transforms.ToTensor()
+#     ])
+#     img_tensor = preprocess(img).unsqueeze(0)  # Add batch dimension
+#     return img_tensor
 
-def deepfeatures_extraction(model, image_path, device):
-    model.eval()
-    data = read(image_path)
-    with torch.no_grad():
-        data = data.to(device)
-        df = model(data)
-    return df
+# def deepfeatures_extraction(model, image_path, device):
+#     model.eval()
+#     data = read(image_path)
+#     with torch.no_grad():
+#         data = data.to(device)
+#         df = model(data)
+#     return df
 
 def inference(opt, device):
     save_dir = Path(opt.save_dir)
@@ -78,7 +78,8 @@ def inference(opt, device):
     
     # datasets = build_datasets(data_cfg, opt.batch_size, cuda, opt.workers, mode='test')
     # evals(data_cfg, save_dir, model, datasets, device, opt.wname, train=False)
-    deepfeatures_extraction(model, opt.image_path, device)
+    # deepfeatures_extraction(model, opt.image_path, device)
+    return model
     
 def parser():    
     parser = argparse.ArgumentParser(description='Face Test')
@@ -111,4 +112,5 @@ if __name__ == "__main__":
     assert os.path.isfile(opt.weights), 'ERROR: --weight path does not exist'
         
     device = select_device(opt.device, batch_size=opt.batch_size, rank=opt.global_rank)
-    inference(opt, device)
+    model = inference(opt, device)
+    print(model)
