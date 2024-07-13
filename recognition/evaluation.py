@@ -11,35 +11,35 @@ from utils.general import select_device, Logger
 from tests.testkits import kface1v1verification, face1v1verification, ijb1v1verification
 
 
-def evals(data_cfg, save_dir, model, datasets, device, wname='last', train=False, re_eval=False):    
-    cfg = data_cfg['test']
-    if cfg['dataset'] == 'kface':
-        save_feat_dir = save_dir / 'kface'
-        save_feat_dir.mkdir(parents=True, exist_ok=True)  # make dir
-        df_path = save_feat_dir / (wname + '_deepfeatures.pth')                   
-        acc = kface1v1verification(cfg['test_pairs_txt'], df_path, model, datasets.loader, device, metric=cfg['metric'], train=train)
+# def evals(data_cfg, save_dir, model, datasets, device, wname='last', train=False, re_eval=False):    
+#     cfg = data_cfg['test']
+#     if cfg['dataset'] == 'kface':
+#         save_feat_dir = save_dir / 'kface'
+#         save_feat_dir.mkdir(parents=True, exist_ok=True)  # make dir
+#         df_path = save_feat_dir / (wname + '_deepfeatures.pth')                   
+#         acc = kface1v1verification(cfg['test_pairs_txt'], df_path, model, datasets.loader, device, metric=cfg['metric'], train=train)
 
-    elif cfg['dataset'] == 'bin':                
-        if isinstance(datasets, list):
-            for dataset in datasets:         
-                print("Test data_path: ", dataset.data_path)       
-                acc = face1v1verification(model, dataset.loader, device, cfg['metric'])
-        else:
-            acc = face1v1verification(model, datasets.loader, device, cfg['metric'])
+#     elif cfg['dataset'] == 'bin':                
+#         if isinstance(datasets, list):
+#             for dataset in datasets:         
+#                 print("Test data_path: ", dataset.data_path)       
+#                 acc = face1v1verification(model, dataset.loader, device, cfg['metric'])
+#         else:
+#             acc = face1v1verification(model, datasets.loader, device, cfg['metric'])
         
-    elif cfg['dataset'] in ['ijbb', 'ijbc']:
-        save_feat_dir = save_dir / cfg['dataset'] 
-        save_feat_dir.mkdir(parents=True, exist_ok=True)  # make dir
-        df_path = save_feat_dir / (wname + '.feat.list')        
-        media_txt = Path(cfg['root']) / cfg['media_txt']
-        pair_label_txt = Path(cfg['root']) / cfg['pair_label_txt']
-        acc = ijb1v1verification(model, datasets.loader, df_path, media_txt,
-                                 pair_label_txt, device=device, metric=cfg['metric'])
+#     elif cfg['dataset'] in ['ijbb', 'ijbc']:
+#         save_feat_dir = save_dir / cfg['dataset'] 
+#         save_feat_dir.mkdir(parents=True, exist_ok=True)  # make dir
+#         df_path = save_feat_dir / (wname + '.feat.list')        
+#         media_txt = Path(cfg['root']) / cfg['media_txt']
+#         pair_label_txt = Path(cfg['root']) / cfg['pair_label_txt']
+#         acc = ijb1v1verification(model, datasets.loader, df_path, media_txt,
+#                                  pair_label_txt, device=device, metric=cfg['metric'])
 
-    elif cfg['dataset'] == 'megface':
-        acc = 0 # we will update later
+#     elif cfg['dataset'] == 'megface':
+#         acc = 0 # we will update later
     
-    return acc
+#     return acc
 
     
 def inference(opt, device):
@@ -57,8 +57,9 @@ def inference(opt, device):
     if cuda and opt.global_rank == -1 and torch.cuda.device_count() > 1:
         model = torch.nn.DataParallel(model)
     
-    datasets = build_datasets(data_cfg, opt.batch_size, cuda, opt.workers, mode='test')
-    evals(data_cfg, save_dir, model, datasets, device, opt.wname, train=False)
+    # datasets = build_datasets(data_cfg, opt.batch_size, cuda, opt.workers, mode='test')
+    # evals(data_cfg, save_dir, model, datasets, device, opt.wname, train=False)
+    return model
     
 def parser():    
     parser = argparse.ArgumentParser(description='Face Test')
