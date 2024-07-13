@@ -6,8 +6,8 @@ import sys
 import argparse
 import torch
 
-# from PIL import Image
-# from torchvision import transforms
+from PIL import Image
+from torchvision import transforms
 
 from datasets.build import build_datasets
 from utils.general import select_device, Logger
@@ -44,22 +44,36 @@ from tests.testkits import kface1v1verification, face1v1verification, ijb1v1veri
     
 #     return acc
 
-# def read(image_path):
-#     img = Image.open(image_path)
-#     preprocess = transforms.Compose([
-#         transforms.Resize((256, 512)),
-#         transforms.ToTensor()
-#     ])
-#     img_tensor = preprocess(img).unsqueeze(0)  # Add batch dimension
-#     return img_tensor
+def read_and_preprocess_image(image_path):
+    # Open the image file
+    img = Image.open(image_path).convert("RGB")
+    
+    # Define the transformation pipeline
+    preprocess = transforms.Compose([
+        transforms.Resize((256, 512)),  # Resize to the desired dimensions
+        transforms.ToTensor(),          # Convert image to tensor
+        transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])  # Normalize
+    ])
+    
+    # Apply transformations
+    img_tensor = preprocess(img)
+    
+    # Add a batch dimension (C, H, W) -> (1, C, H, W)
+    img_tensor = img_tensor.unsqueeze(0)
+    
+    return img_tensor
 
-# def deepfeatures_extraction(model, image_path, device):
-#     model.eval()
-#     data = read(image_path)
-#     with torch.no_grad():
-#         data = data.to(device)
-#         df = model(data)
-#     return df
+
+def deepfeatures_extraction(model, image_path, device):
+    model.eval()  # Set model to evaluation mode
+    data = read_and_preprocess_image(image_path)  # Read and preprocess the image
+    data = data.to(device)  # Move the tensor to the device (CPU or GPU)
+    
+    with torch.no_grad():  # Disable gradient calculation
+        deep_features = model(data)  # Get the model's output (deep features)
+    
+    return deep_features
+
 
 def inference(opt, device):
     save_dir = Path(opt.save_dir)
@@ -78,8 +92,7 @@ def inference(opt, device):
     
     # datasets = build_datasets(data_cfg, opt.batch_size, cuda, opt.workers, mode='test')
     # evals(data_cfg, save_dir, model, datasets, device, opt.wname, train=False)
-    # deepfeatures_extraction(model, opt.image_path, device)
-    return model
+    deepfeatures_extraction(model, opt.image_path, device)
     
 def parser():    
     parser = argparse.ArgumentParser(description='Face Test')
@@ -112,5 +125,5 @@ if __name__ == "__main__":
     assert os.path.isfile(opt.weights), 'ERROR: --weight path does not exist'
         
     device = select_device(opt.device, batch_size=opt.batch_size, rank=opt.global_rank)
-    model = inference(opt, device)
-    print(model)
+    deep_feature = inference(opt, device)
+    print(deep_feature)
