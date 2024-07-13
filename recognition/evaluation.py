@@ -36,10 +36,10 @@ def evals(data_cfg, save_dir, model, datasets, device, wname='last', train=False
        acc = ijb1v1verification(model, datasets.loader, df_path, media_txt,
                                 pair_label_txt, device=device, metric=cfg['metric'])
 
-  elif cfg['dataset'] == 'megface':
+   elif cfg['dataset'] == 'megface':
        acc = 0 # we will update later
     
-  return acc
+   return acc
 
     
 def inference(opt, device):
