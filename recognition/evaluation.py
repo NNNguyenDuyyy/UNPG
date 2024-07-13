@@ -92,8 +92,8 @@ def inference(opt, device):
     
     # datasets = build_datasets(data_cfg, opt.batch_size, cuda, opt.workers, mode='test')
     # evals(data_cfg, save_dir, model, datasets, device, opt.wname, train=False)
-    #deepfeatures_extraction(model, opt.image_path, device)
-    return model
+    deepfeatures_extraction(model, opt.image_path, device)
+    #return model
     
 def parser():    
     parser = argparse.ArgumentParser(description='Face Test')
