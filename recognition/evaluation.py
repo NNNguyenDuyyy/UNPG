@@ -7,7 +7,6 @@ import argparse
 import torch
 
 from PIL import Image
-from torchvision import transforms
 
 from datasets.build import build_datasets
 from utils.general import select_device, Logger
@@ -43,16 +42,10 @@ from tests.testkits import kface1v1verification, face1v1verification, ijb1v1veri
 #         acc = 0 # we will update later
     
 #     return acc
-def read(image_path):
-    img = Image.open(image_path)
-    preprocess = transforms.Compose([
-        transforms.Resize(256),
-        transforms.CenterCrop(224),
-        transforms.ToTensor(),
-        transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
-    ])
-    img_tensor = preprocess(img).unsqueeze(0)  # Add batch dimension
-    return img_tensor
+
+def read(image_url):
+    img = Image.open(image_url)
+    return img
         
 def deepfeatures_extraction(model, image_url, device):
     model.eval()
