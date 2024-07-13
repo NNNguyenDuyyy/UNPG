@@ -51,7 +51,6 @@ def deepfeatures_extraction(model, image_url, device):
     model.eval()
     data = read(image_url)
     with torch.no_grad():
-        data = data.to(device)
         df = model(data)
     return df
 
