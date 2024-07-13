@@ -7,8 +7,6 @@ import argparse
 import torch
 
 from PIL import Image
-from io import BytesIO
-import requests
 from torchvision import transforms
 
 from datasets.build import build_datasets
@@ -45,9 +43,8 @@ from tests.testkits import kface1v1verification, face1v1verification, ijb1v1veri
 #         acc = 0 # we will update later
     
 #     return acc
-def read(image_url):
-    response = requests.get(image_url)
-    img = Image.open(BytesIO(response.content))
+def read(image_path):
+    img = Image.open(image_path)
     preprocess = transforms.Compose([
         transforms.Resize(256),
         transforms.CenterCrop(224),
