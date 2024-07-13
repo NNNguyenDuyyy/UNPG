@@ -82,7 +82,7 @@ def inference(opt, device):
     
     # datasets = build_datasets(data_cfg, opt.batch_size, cuda, opt.workers, mode='test')
     # evals(data_cfg, save_dir, model, datasets, device, opt.wname, train=False)
-    deepfeatures_extraction(model, image_url, device)
+    deepfeatures_extraction(model, opt.image_url, device)
     
 def parser():    
     parser = argparse.ArgumentParser(description='Face Test')
@@ -96,7 +96,7 @@ def parser():
     parser.add_argument('--device', default='0', help='cuda device, i.e. 0 or 0,1,2,3 or cpu')
     parser.add_argument('--project', default='runs_eccv_hope', help='save to project/name')
     parser.add_argument('--name', default='exp', help='run test dir name')
-    parser.add_argument('--image_url', type=str)
+    parser.add_argument('--image_url', type=str , default='')
     
     args = parser.parse_args()
     return args
