@@ -50,7 +50,7 @@ def read_and_preprocess_image(image_path):
     
     # Define the transformation pipeline
     preprocess = transforms.Compose([
-        transforms.Resize((256, 512)),  # Resize to the desired dimensions
+        transforms.Resize((112, 112)),  # Resize to the desired dimensions
         transforms.ToTensor(),          # Convert image to tensor
         transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])  # Normalize
     ])
