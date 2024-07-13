@@ -7,6 +7,7 @@ import argparse
 import torch
 
 from PIL import Image
+from torchvision import transforms
 
 from datasets.build import build_datasets
 from utils.general import select_device, Logger
@@ -43,14 +44,20 @@ from tests.testkits import kface1v1verification, face1v1verification, ijb1v1veri
     
 #     return acc
 
-def read(image_url):
-    img = Image.open(image_url)
-    return img
-        
-def deepfeatures_extraction(model, image_url, device):
+def read(image_path):
+    img = Image.open(image_path)
+    preprocess = transforms.Compose([
+        transforms.Resize((256, 512)),
+        transforms.ToTensor()
+    ])
+    img_tensor = preprocess(img).unsqueeze(0)  # Add batch dimension
+    return img_tensor
+
+def deepfeatures_extraction(model, image_path, device):
     model.eval()
-    data = read(image_url)
+    data = read(image_path)
     with torch.no_grad():
+        data = data.to(device)
         df = model(data)
     return df
 
@@ -71,7 +78,7 @@ def inference(opt, device):
     
     # datasets = build_datasets(data_cfg, opt.batch_size, cuda, opt.workers, mode='test')
     # evals(data_cfg, save_dir, model, datasets, device, opt.wname, train=False)
-    deepfeatures_extraction(model, opt.image_url, device)
+    deepfeatures_extraction(model, opt.image_path, device)
     
 def parser():    
     parser = argparse.ArgumentParser(description='Face Test')
@@ -85,7 +92,7 @@ def parser():
     parser.add_argument('--device', default='0', help='cuda device, i.e. 0 or 0,1,2,3 or cpu')
     parser.add_argument('--project', default='runs_eccv_hope', help='save to project/name')
     parser.add_argument('--name', default='exp', help='run test dir name')
-    parser.add_argument('--image_url', type=str , default='')
+    parser.add_argument('--image_path', type=str , default='')
     
     args = parser.parse_args()
     return args
