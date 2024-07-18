@@ -128,4 +128,4 @@ if __name__ == "__main__":
         
     device = select_device(opt.device, batch_size=opt.batch_size, rank=opt.global_rank)
     model = inference(opt, device)
-    return model
+    print(model)
