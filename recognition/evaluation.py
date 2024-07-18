@@ -127,5 +127,5 @@ if __name__ == "__main__":
     assert os.path.isfile(opt.weights), 'ERROR: --weight path does not exist'
         
     device = select_device(opt.device, batch_size=opt.batch_size, rank=opt.global_rank)
-    inference(opt, device)
+    model = inference(opt, device)
     #print(model)
