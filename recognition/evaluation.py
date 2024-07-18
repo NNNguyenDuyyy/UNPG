@@ -92,7 +92,7 @@ def inference(opt, device):
     
     # datasets = build_datasets(data_cfg, opt.batch_size, cuda, opt.workers, mode='test')
     # evals(data_cfg, save_dir, model, datasets, device, opt.wname, train=False)
-    deep_features = deepfeatures_extraction(model, opt.image_path, device)
+    #deep_features = deepfeatures_extraction(model, opt.image_path, device)
     #return deep_features
     return model
     
