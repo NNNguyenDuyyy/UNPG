@@ -11,7 +11,7 @@ from torchvision import transforms
 
 from datasets.build import build_datasets
 from utils.general import select_device, Logger
-from tests.testkits import kface1v1verification, face1v1verification, ijb1v1verification
+#from tests.testkits import kface1v1verification, face1v1verification, ijb1v1verification
 
 
 # def evals(data_cfg, save_dir, model, datasets, device, wname='last', train=False, re_eval=False):    
