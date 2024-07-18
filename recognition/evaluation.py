@@ -93,8 +93,8 @@ def inference(opt, device):
     # datasets = build_datasets(data_cfg, opt.batch_size, cuda, opt.workers, mode='test')
     # evals(data_cfg, save_dir, model, datasets, device, opt.wname, train=False)
     deep_features = deepfeatures_extraction(model, opt.image_path, device)
-    return deep_features
-    #return model
+    #return deep_features
+    return model
     
 def parser():    
     parser = argparse.ArgumentParser(description='Face Test')
@@ -127,5 +127,5 @@ if __name__ == "__main__":
     assert os.path.isfile(opt.weights), 'ERROR: --weight path does not exist'
         
     device = select_device(opt.device, batch_size=opt.batch_size, rank=opt.global_rank)
-    model = inference(opt, device)
-    print(model)
+    inference(opt, device)
+    #print(model)
